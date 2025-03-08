@@ -35,9 +35,12 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/PlaywriteITModerna-ExtraLight.ttf"]
+          "fonts": [
+            "./assets/fonts/PlaywriteITModerna-ExtraLight.ttf"
+          ]
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
