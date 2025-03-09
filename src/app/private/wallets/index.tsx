@@ -3,9 +3,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { walletsModelView } from "./wallets-model-view";
 import { Profile } from "@/components/Profile";
+import { ModalCreateWallet } from "./ModalCreateWallet";
+import { useState } from "react";
 
 export default function Wallets(){
-    const {wallets, isLoadingWallets} = walletsModelView()
+    const {wallets, isLoadingWallets, isModalOpen, handleCloseModal} = walletsModelView()
 
     return (
         <View className="flex-1 items-center pt-14">
@@ -45,6 +47,11 @@ export default function Wallets(){
                     <Text className="text-xl text-white font-semibold">Criar carteira</Text>
                 </TouchableOpacity>
             </View>
+
+            <ModalCreateWallet
+                isModalOpen={isModalOpen}
+                closeModal={handleCloseModal}
+            />
         </View>
     )
 }

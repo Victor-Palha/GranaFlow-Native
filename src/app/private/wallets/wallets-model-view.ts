@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { Alert } from "react-native"
 
 export function walletsModelView(){
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const [isLoadingWallets, setIsLoadingWallets] = useState(false)
     const [wallets, setWallets] = useState<any[]>([])
 
@@ -34,6 +35,10 @@ export function walletsModelView(){
         }
     }
 
+    function handleCloseModal(){
+        setIsModalOpen(!isModalOpen)
+    }
+
     useEffect(()=>{
         loadWallets()
     }, [])
@@ -42,7 +47,9 @@ export function walletsModelView(){
     const values = {
         wallets,
         isLoadingWallets,
-        loadWallets
+        isModalOpen,
+        loadWallets,
+        handleCloseModal
     }
 
     return values
