@@ -2,6 +2,8 @@ import { createContext, useState } from "react";
 import * as WebBrowser from 'expo-web-browser';
 import { Alert } from "react-native";
 import { URLS } from "@/constants/URLS";
+import { LocalStorage, UserProfile } from "@/persistence/localStorage";
+import SecureStoragePersistence from "@/persistence/secureStorage";
 
 type AuthState = {
     user_id: string | null,
@@ -28,16 +30,20 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
             const result = await WebBrowser.openAuthSessionAsync(authUrl, `${URLS.api}/auth/google/callback`);
             if (result.type === 'success') {
                 const params = new URLSearchParams(result.url.split('?')[1]);
-                const token = params.get('token');
+                const token = params.get('token') ?? '';
 
                 const user = {
                   id: params.get('id'),
                   email: params.get('email'),
                   name: params.get('name'),
                   avatar_url: params.get('avatar_url'),
-                };
+                } as UserProfile;
 
                 Alert.alert('Sucesso', 'Autenticação concluída!');
+
+                await SecureStoragePersistence.setJWT(token)
+                await LocalStorage.setUserProfile(user)
+                
                 setAuthState({
                     authenticated: true,
                     user_id: user.id

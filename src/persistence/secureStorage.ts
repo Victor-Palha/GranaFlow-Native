@@ -3,7 +3,6 @@ import * as SecureStore from 'expo-secure-store';
 class SecureStoragePersistence {
     private static KEYS = {
         JWT_TOKEN: "granaFlow.jwt",
-        // REFRESH: "granaFlow.refresh",
         USERID: "granaFlow.userId",
     }
     static async clearTokens(){
