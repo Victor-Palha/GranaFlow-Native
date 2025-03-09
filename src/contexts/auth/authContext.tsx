@@ -50,7 +50,7 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
                     user_id: user.id
                 })
 
-                router.replace('/private/home')
+                router.replace('/private/wallets')
             } else {
                 Alert.alert('Erro', 'Autenticação cancelada ou falhou');
                 setAuthState({

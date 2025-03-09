@@ -1,9 +1,12 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { walletsModelView } from "./wallets-model-view";
 import { Profile } from "@/components/Profile";
 
-export default function Home(){
+export default function Wallets(){
+    const {wallets, isLoadingWallets} = walletsModelView()
+
     return (
         <View className="flex-1 items-center pt-14">
             <View className="flex-row items-center justify-between w-full px-10">
@@ -22,11 +25,19 @@ export default function Home(){
 
 
             <View className="items-center gap-5 mt-20 flex-wrap">
-                <Profile
-                    id={1}
-                    name="João Victor"
-                    type="PERSONAL"
-                />
+                {wallets.length > 0 && (
+                    <FlatList
+                        data={wallets}
+                        keyExtractor={item => item.id}
+                        renderItem={(({item}) => (
+                            <Profile
+                                id={item.id}
+                                name={item.name}
+                                type={item.type}
+                            />
+                        ))}
+                    />
+                )}
                 <TouchableOpacity className="items-center justify-center gap-2">
                     <View className="w-28 h-28 border-black border rounded-full flex items-center justify-center border-dashed bg-green-medium shadow-black shadow-md">
                         <Ionicons name="add-sharp" size={40} color="black" />

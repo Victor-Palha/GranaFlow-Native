@@ -1,9 +1,9 @@
 import { URLS } from "@/constants/URLS"
 import axios from "axios"
 
-class API{
+export class API{
     static server = axios.create({
-        url: URLS.api
+        baseURL: URLS.api
     })
 
     static setTokenAuth(token: string){
