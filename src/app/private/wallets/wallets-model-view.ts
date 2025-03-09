@@ -35,7 +35,7 @@ export function walletsModelView(){
         }
     }
 
-    function handleCloseModal(){
+    function handleModal(){
         setIsModalOpen(!isModalOpen)
     }
 
@@ -49,7 +49,7 @@ export function walletsModelView(){
         isLoadingWallets,
         isModalOpen,
         loadWallets,
-        handleCloseModal
+        handleModal
     }
 
     return values

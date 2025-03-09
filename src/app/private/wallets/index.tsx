@@ -4,11 +4,9 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { walletsModelView } from "./wallets-model-view";
 import { Profile } from "@/components/Profile";
 import { ModalCreateWallet } from "./ModalCreateWallet";
-import { useState } from "react";
 
 export default function Wallets(){
-    const {wallets, isLoadingWallets, isModalOpen, handleCloseModal} = walletsModelView()
-
+    const {wallets, isLoadingWallets, isModalOpen, handleModal} = walletsModelView()
     return (
         <View className="flex-1 items-center pt-14">
             <View className="flex-row items-center justify-between w-full px-10">
@@ -25,32 +23,45 @@ export default function Wallets(){
                 <Text className="text-lg text-white" style={{ fontFamily: 'PlaywriteITModerna-Regular' }}>Centralize suas finanças em um único lugar</Text>
             </View>
 
-
-            <View className="items-center gap-5 mt-20 flex-wrap">
-                {wallets.length > 0 && (
+            <View className="items-center gap-5 mt-5">
+                {wallets && wallets.length > 0 ? (
                     <FlatList
                         data={wallets}
-                        keyExtractor={item => item.id}
-                        renderItem={(({item}) => (
-                            <Profile
-                                id={item.id}
-                                name={item.name}
-                                type={item.type}
-                            />
-                        ))}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => (
+                            <Profile id={item.id} name={item.name} type={item.type} />
+                        )}
+                        contentContainerStyle={{ alignItems: 'center', paddingTop: 80 }}
+                        ListFooterComponent={
+                            <TouchableOpacity
+                                className="items-center justify-center gap-2 mt-10"
+                                onPress={handleModal}
+                            >
+                                <View className="w-28 h-28 border-black border rounded-full flex items-center justify-center border-dashed bg-green-medium shadow-black shadow-md">
+                                    <Ionicons name="add-sharp" size={40} color="black" />
+                                </View>
+                                <Text className="text-xl text-white font-semibold">Criar carteira</Text>
+                            </TouchableOpacity>
+                        }
                     />
-                )}
-                <TouchableOpacity className="items-center justify-center gap-2">
-                    <View className="w-28 h-28 border-black border rounded-full flex items-center justify-center border-dashed bg-green-medium shadow-black shadow-md">
-                        <Ionicons name="add-sharp" size={40} color="black" />
+                    ) : (
+                    <View className="items-center mt-20">
+                        <TouchableOpacity
+                            className="items-center justify-center gap-2"
+                            onPress={handleModal}
+                        >
+                            <View className="w-28 h-28 border-black border rounded-full flex items-center justify-center border-dashed bg-green-medium shadow-black shadow-md">
+                                <Ionicons name="add-sharp" size={40} color="black" />
+                            </View>
+                            <Text className="text-xl text-white font-semibold">Criar carteira</Text>
+                        </TouchableOpacity>
                     </View>
-                    <Text className="text-xl text-white font-semibold">Criar carteira</Text>
-                </TouchableOpacity>
+                )}
             </View>
 
             <ModalCreateWallet
                 isModalOpen={isModalOpen}
-                closeModal={handleCloseModal}
+                closeModal={handleModal}
             />
         </View>
     )
