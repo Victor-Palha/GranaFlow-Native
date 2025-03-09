@@ -1,9 +1,10 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import * as WebBrowser from 'expo-web-browser';
 import { Alert } from "react-native";
 import { URLS } from "@/constants/URLS";
 import { LocalStorage, UserProfile } from "@/persistence/localStorage";
 import SecureStoragePersistence from "@/persistence/secureStorage";
+import { router } from "expo-router";
 
 type AuthState = {
     user_id: string | null,
@@ -48,6 +49,8 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
                     authenticated: true,
                     user_id: user.id
                 })
+
+                router.replace('/private/home')
             } else {
                 Alert.alert('Erro', 'Autenticação cancelada ou falhou');
                 setAuthState({
