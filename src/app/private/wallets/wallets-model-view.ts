@@ -3,8 +3,10 @@ import SecureStoragePersistence from "@/persistence/secureStorage"
 import { AxiosError } from "axios"
 import { useEffect, useState } from "react"
 import { Alert } from "react-native"
+// {\"wallets\":[{\"id\":11,\"name\":\"Banana Wallet\",\"type\":\"PERSONAL\",\"inserted_at\":\"2025-03-10T02:05:03Z\",\"updated_at\":\"2025-03-10T02:05:03Z\",\"user_id\":6}]}
 
 export function walletsModelView(){
+    const [trackWallets, setTrackWallets] = useState(0)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isLoadingWallets, setIsLoadingWallets] = useState(false)
     const [wallets, setWallets] = useState<any[]>([])
@@ -19,7 +21,6 @@ export function walletsModelView(){
             const api = API
             api.setTokenAuth(token)
             const response = await api.server.get("/api/wallet")
-            console.log(response)
             setWallets(response.data.wallets)
         } catch (error) {
             if(error instanceof AxiosError){
@@ -41,7 +42,7 @@ export function walletsModelView(){
 
     useEffect(()=>{
         loadWallets()
-    }, [])
+    }, [trackWallets])
 
 
     const values = {
@@ -49,7 +50,8 @@ export function walletsModelView(){
         isLoadingWallets,
         isModalOpen,
         loadWallets,
-        handleModal
+        handleModal,
+        setTrackWallets
     }
 
     return values

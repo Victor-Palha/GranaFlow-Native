@@ -6,7 +6,7 @@ import { Profile } from "@/components/Profile";
 import { ModalCreateWallet } from "./ModalCreateWallet";
 
 export default function Wallets(){
-    const {wallets, isLoadingWallets, isModalOpen, handleModal} = walletsModelView()
+    const {wallets, isLoadingWallets, isModalOpen, handleModal, setTrackWallets} = walletsModelView()
     return (
         <View className="flex-1 items-center pt-14">
             <View className="flex-row items-center justify-between w-full px-10">
@@ -62,6 +62,7 @@ export default function Wallets(){
             <ModalCreateWallet
                 isModalOpen={isModalOpen}
                 closeModal={handleModal}
+                setTrackWallets={setTrackWallets}
             />
         </View>
     )
