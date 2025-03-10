@@ -10,7 +10,7 @@ export function Profile(data: ProfileProps){
     return (
         <TouchableOpacity className="items-center justify-center gap-2">
             <Link
-                href="/"
+                href={`/private/home/${data.id}`}
                 className={
                     "w-28 h-28 border-black border rounded-full flex text-center pt-9 justify-center border-dashed shadow-black shadow-md " +
                     (data.type === "PERSONAL" ? "bg-yellow-medium" : "bg-blue-medium")
