@@ -5,7 +5,7 @@ import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Link, useLocalSearchParams } from 'expo-router';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
-import { Methods, paymentsModelView } from './paymentsModalView';
+import { Methods, paymentsModelView } from './paymentsModelView';
 import { ModalCreateTransaction } from './ModalCreateTransaction';
 
 export default function Payments(){
