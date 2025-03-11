@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <View className="flex-1 items-center bg-gray-medium">
         <Header total={500.00}/>
-        <Nav/>
+        <Nav walletId={id}/>
       <Text>User ID: {id}</Text>
     </View>
   );

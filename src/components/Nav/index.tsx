@@ -7,14 +7,16 @@ import { View } from "react-native";
 {/* Produtos */}
 {/* Usuários */}
 {/* Relatorios */}
-
-export function Nav() {
+type NavProps = {
+    walletId: string | string[]
+}
+export function Nav({walletId}: NavProps) {
     return (
-        <View className="flex-row bg-white rounded-md shadow-black shadow-sm top-[-50px] relative h-[100px] w-[80%] mx-auto justify-center items-center gap-4">
-            <BoxNav title="Pagamentos" target="/payments">
+        <View className="flex-row bg-gray-light rounded-md shadow-black shadow-sm top-[-50px] relative h-[100px] w-[80%] mx-auto justify-center items-center gap-4">
+        <BoxNav title="Transações" target={`/private/payments/${walletId}`}>
                 <FontAwesome name="credit-card" size={20} color="black" />
             </BoxNav>
-            <BoxNav title="Relatórios" target="/summary">
+            <BoxNav title="Relatórios" target="/">
                 <FontAwesome6 name="money-bill-trend-up" size={20} color="black" />
             </BoxNav>
         </View>

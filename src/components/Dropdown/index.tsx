@@ -30,23 +30,19 @@ export function Dropdown(data: DropdownProps){
             </TouchableOpacity>
 
             {isDropdownOpen && (
-                <View className="border border-gray-300 rounded-md bg-white max-h-24 overflow-hidden mt-1">
-                <FlatList
-                    data={data.data}
-                    keyExtractor={(item) => item.value}
-                    renderItem={({ item }) => (
+                <View className="border border-gray-300 rounded-md bg-white h-max overflow-hidden mt-1">
+                    {data.data.map((item) => (
                     <TouchableOpacity
+                        key={item.value}
                         onPress={() => {
-                            handleSelectItem(item);
-                            setIsDropdownOpen(false);
+                        handleSelectItem(item);
+                        setIsDropdownOpen(false);
                         }}
                         className="flex-row items-center p-3 border-b border-gray-200"
                     >
                         <Text className="ml-2 text-black">{item.label}</Text>
                     </TouchableOpacity>
-                    )}
-                    className="w-full"
-                />
+                    ))}
                 </View>
             )}
         </View>

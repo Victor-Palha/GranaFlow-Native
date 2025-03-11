@@ -51,13 +51,8 @@ export function Header({total}: HeaderProps){
             </View>
 
             <View className="flex flex-col justify-end items-center pt-20">
-                <Text className="font-semibold text-white">Total</Text>
-                <Text className="
-                    text-5xl
-                    font-bold
-                    text-white
-                    mt-2
-                ">R$ {total.toFixed(2)}</Text>
+                <Text className="font-semibold text-white">Total Atual</Text>
+                <Text className="text-5xl font-bold text-white mt-2">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total)}</Text>
             </View>
         </LinearGradient>
     )

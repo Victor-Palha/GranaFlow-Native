@@ -1,4 +1,5 @@
-import { Link } from "expo-router";
+import { Link, LinkProps } from 'expo-router';
+import { useHrefAttrs } from "expo-router/build/link/useLinkHooks";
 import { Text, View } from "react-native";
 
 {/* Pagamentos */}
@@ -7,13 +8,13 @@ import { Text, View } from "react-native";
 {/* Relatorios */}
 type BoxNavProps = {
     title: string;
-    target: string;
+    target: LinkProps['href'];
     children: React.ReactNode;
 }
 export function BoxNav({title, children, target}: BoxNavProps){
     return (
         <View className="flex items-center flex-col">
-            <Link href="/" className="rounded-full p-4 bg-green-low hover:scale-105 transition hover:shadow-sm hover:shadow-green-high">
+            <Link href={target} className="rounded-full p-4 bg-green-low hover:scale-105 transition hover:shadow-sm hover:shadow-green-high border-green-high border-[0.2px]">
                 {children}
             </Link>
             <Text className="text-sm font-semibold text-mainText">{title}</Text>

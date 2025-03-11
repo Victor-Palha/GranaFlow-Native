@@ -1,7 +1,7 @@
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { walletsModelView } from "./wallets-model-view";
+import { walletsModelView } from "./walletsModelView";
 import { Profile } from "@/components/Profile";
 import { ModalCreateWallet } from "./ModalCreateWallet";
 
