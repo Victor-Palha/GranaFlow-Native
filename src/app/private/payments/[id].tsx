@@ -84,6 +84,7 @@ export default function Payments(){
                 )}
             </View> */}
             <ModalCreateTransaction
+                wallet_id={id}
                 closeModal={handleModal}
                 isModalOpen={isModalOpen}
                 setTrackTransactions={setTrackTransactions}
