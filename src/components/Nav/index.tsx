@@ -13,7 +13,7 @@ type NavProps = {
 export function Nav({walletId}: NavProps) {
     return (
         <View className="flex-row bg-gray-light rounded-md shadow-black shadow-sm top-[-50px] relative h-[100px] w-[80%] mx-auto justify-center items-center gap-4">
-        <BoxNav title="Transações" target={`/private/payments/${walletId}`}>
+            <BoxNav title="Transações" target={`/private/payments/${walletId}`}>
                 <FontAwesome name="credit-card" size={20} color="black" />
             </BoxNav>
             <BoxNav title="Relatórios" target="/">

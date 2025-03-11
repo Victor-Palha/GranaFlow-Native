@@ -21,7 +21,7 @@ export default function Payments(){
     } = paymentsModelView()
 
     return (
-        <View className="flex-1 items-center bg-gray-medium">
+        <View className="flex-1 items-center bg-gray-200">
             {/* Header */}
             <LinearGradient colors={[colors.green.high, colors.green.medium]} style={styles.background}>
                 <Link href={`/private/home/${id}`}>
