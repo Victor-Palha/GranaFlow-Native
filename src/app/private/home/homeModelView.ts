@@ -19,7 +19,8 @@ export function HomeModelView(wallet_id: string | string[]){
             const response = await api.server.get("/api/transaction", {
                 params: {
                     wallet_id,
-                    limit: 5
+                    limit: 5,
+                    is_until_today: true
                 }
             });
         

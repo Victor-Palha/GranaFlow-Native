@@ -1,7 +1,7 @@
 import { Header } from '@/components/Header';
 import { Nav } from '@/components/Nav';
 import { useLocalSearchParams } from 'expo-router';
-import { Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import { HomeModelView } from './homeModelView';
 import { Transactions } from '@/components/Transactions';
 
@@ -18,12 +18,17 @@ export default function Home() {
             Últimas Transações
           </Text>
           {latestTransactions.length > 0 && (
-            latestTransactions.map((item)=>(
-              <Transactions
-                key={item.id}
-                data={item}
-              />
-            ))
+            <FlatList
+              data={latestTransactions}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <Transactions
+                  key={item.id}
+                  data={item}
+                />
+              )}
+              contentContainerStyle={{ gap: 16 }}
+            />
           )}
         </View>
     </View>

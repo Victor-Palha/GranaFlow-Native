@@ -68,8 +68,33 @@ export function ModalCreateTransaction({wallet_id, isModalOpen, closeModal, setT
     }
   }
 
-  async function createRecurrentTransaction(api: typeof API){
-
+  async function createRecurrentTransaction(api: typeof API) {
+    try {
+      const data = {
+        name: nameTransaction,
+        type: typeTransaction.value,
+        amount: parseCurrencyToNumber(amountTransaction),
+        start_date: recurrenceStart.toISOString(),
+        end_date: recurrenceEnd.toISOString(),
+        subtype: subtypeTransaction.value,
+        description: description,
+        proof_url: null,
+        wallet_id: parseInt(wallet_id as string),
+      };
+      console.log(data)
+  
+      const response = await api.server.post("/api/transaction/recurrent", data);
+      console.log(response.data)
+      setTrackTransactions(Math.random() * 100);
+      resetStates();
+      closeModal();
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Alert.alert("Erro", error.response?.data.message || "Erro ao criar transações recorrentes.");
+      } else {
+        Alert.alert("Erro", "Erro inesperado ao criar transações recorrentes.");
+      }
+    }
   }
 
   function parseCurrencyToNumber(value: string): number {

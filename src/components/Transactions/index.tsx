@@ -15,7 +15,7 @@ export function Transactions({data}: TransactionProps){
     }).format(parseFloat(data.amount));
   
     return (
-      <View className="flex-row justify-between items-center w-full border-b-[1px] border-green-high pb-3">
+      <View className="flex-row justify-between items-center w-full pb-3">
         {/* Left - Icon + Text */}
         <View className="flex-row items-start gap-3 flex-1">
           {/* Icon */}

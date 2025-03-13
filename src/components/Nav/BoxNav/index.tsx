@@ -14,7 +14,7 @@ type BoxNavProps = {
 export function BoxNav({title, children, target}: BoxNavProps){
     return (
         <View className="flex items-center flex-col">
-            <Link href={target} className="rounded-full p-4 bg-green-low hover:scale-105 transition hover:shadow-sm hover:shadow-green-high border-green-high border-[0.2px]">
+            <Link href={target} className="rounded-full p-4 bg-green-medium border-green-high border-[0.2px]">
                 {children}
             </Link>
             <Text className="text-sm font-semibold text-mainText">{title}</Text>
