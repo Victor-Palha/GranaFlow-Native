@@ -7,6 +7,7 @@ import { Link, useLocalSearchParams } from 'expo-router';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import { Methods, paymentsModelView } from './paymentsModelView';
 import { ModalCreateTransaction } from './ModalCreateTransaction';
+import { Transactions } from '@/components/Transactions';
 
 export default function Payments(){
     const { id } = useLocalSearchParams();
@@ -15,11 +16,13 @@ export default function Payments(){
         totalAmount,
         paymentsMethods,
         isModalOpen,
+        allTransactions,
+        isLoadingTransactions,
         handleModal,
         handlePaymentsMethods,
         setTrackTransactions,
         handleBackToHome
-    } = paymentsModelView()
+    } = paymentsModelView(id)
 
     return (
         <View className="flex-1 items-center bg-gray-200">
@@ -64,26 +67,18 @@ export default function Payments(){
                     </TouchableOpacity>
                 </View>
             </View>
-            <Text className='text-2xl'>{id}</Text>
 
-            {/* <View className="flex flex-col gap-2 w-[80%] justify-center mx-auto">
-                {!isLoadingPaymentsMethods && latestsTransaction && latestsTransaction.map((transactions)=> (
+            <View className="flex flex-col gap-2 w-[80%] justify-center mx-auto">
+                {!isLoadingTransactions && allTransactions && allTransactions.map((transactions)=> (
                     <Transactions
-                        _id={transactions._id}
-                        key={transactions._id}
-                        type={transactions.type}
-                        amount={transactions.amount}
-                        date={transactions.createdAt}
-                        name={transactions.name}
-                        description={transactions.description}
-                        client={transactions.client}
-                        loadindPayments={loadindPayments}
+                        key={transactions.id}
+                        data={transactions}
                     />
                 ))}
-                {isLoadingPaymentsMethods && (
+                {/* {isLoadingTransactions && (
                     <Loading/>
-                )}
-            </View> */}
+                )} */}
+            </View>
             <ModalCreateTransaction
                 wallet_id={id}
                 closeModal={handleModal}
