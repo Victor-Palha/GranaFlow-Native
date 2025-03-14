@@ -18,15 +18,16 @@ export default function Payments(){
         handleModal,
         handlePaymentsMethods,
         setTrackTransactions,
+        handleBackToHome
     } = paymentsModelView()
 
     return (
         <View className="flex-1 items-center bg-gray-200">
             {/* Header */}
             <LinearGradient colors={[colors.green.high, colors.green.medium]} style={styles.background}>
-                <Link href={`/private/home/${id}`}>
+                <TouchableOpacity onPress={handleBackToHome}>
                     <EvilIcons name="navicon" size={30} color="white" />
-                </Link>
+                </TouchableOpacity>
                 <Text className="font-bold mx-auto text-white text-xl">Transações</Text>
             </LinearGradient>
             {/* Main Info */}

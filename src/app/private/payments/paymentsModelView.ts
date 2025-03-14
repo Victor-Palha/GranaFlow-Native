@@ -1,6 +1,4 @@
-import { Transaction } from "@/@types/transactions"
-import { API } from "@/api/config"
-import SecureStoragePersistence from "@/persistence/secureStorage"
+import { router } from "expo-router"
 import { useState } from "react"
 
 export enum Methods {
@@ -22,13 +20,18 @@ export function paymentsModelView(){
         setIsModalOpen(!isModalOpen)
     }
 
+    function handleBackToHome(){
+        router.back()
+    }
+
     const values = {
         totalAmount,
         paymentsMethods,
         isModalOpen,
         setTrackTransactions,
         handlePaymentsMethods,
-        handleModal
+        handleModal,
+        handleBackToHome
     }
 
     return values
