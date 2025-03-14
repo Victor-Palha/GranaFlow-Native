@@ -16,7 +16,7 @@ export function Nav({walletId}: NavProps) {
             <BoxNav title="Transações" target={`/private/payments/${walletId}`}>
                 <FontAwesome name="credit-card" size={20} color="black" />
             </BoxNav>
-            <BoxNav title="Relatórios" target="/">
+            <BoxNav title="Relatórios" target={`/private/reports/${walletId}`}>
                 <FontAwesome6 name="money-bill-trend-up" size={20} color="black" />
             </BoxNav>
         </View>
