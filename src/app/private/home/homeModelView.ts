@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 export function HomeModelView(wallet_id: string | string[]){
     const [isLoadingLatestTransactions, setIsLoadingLatestTransactions] = useState(false)
     const [latestTransactions, setLatestTransactions] = useState<Transaction[]>([])
+    const [currentBalance, setCurrentBalance] = useState(0.0)
 
     async function fetchTransactions(wallet_id: string | string[]) {
         const api = API;
@@ -23,9 +24,16 @@ export function HomeModelView(wallet_id: string | string[]){
                     is_until_today: true
                 }
             });
-        
+
+            const currentBalanceResponse = await api.server.get("/api/transaction/balance", {
+                params: {
+                    wallet_id
+                }
+            })
+            const {current_balance} = currentBalanceResponse.data
             const {transactions} = response.data;
-          setLatestTransactions(transactions)
+            setLatestTransactions(transactions)
+            setCurrentBalance(current_balance)
         } catch (error) {
             console.error("Erro ao buscar transações:", error);
             throw error;
@@ -40,6 +48,7 @@ export function HomeModelView(wallet_id: string | string[]){
 
     const values = {
         latestTransactions,
+        currentBalance,
         isLoadingLatestTransactions
     }
 

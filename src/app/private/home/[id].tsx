@@ -7,10 +7,10 @@ import { Transactions } from '@/components/Transactions';
 
 export default function Home() {
   const { id } = useLocalSearchParams();
-  const {isLoadingLatestTransactions, latestTransactions} = HomeModelView(id)
+  const {isLoadingLatestTransactions, latestTransactions, currentBalance} = HomeModelView(id)
   return (
     <View className="flex-1 items-center bg-gray-200">
-        <Header total={500.00}/>
+        <Header total={currentBalance}/>
         <Nav walletId={id}/>
 
         <View className='gap-4 px-10'>
