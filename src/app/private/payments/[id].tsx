@@ -35,8 +35,8 @@ export default function Payments(){
             </LinearGradient>
             {/* Main Info */}
             <View className="p-4">
-                <View className="flex-row justify-between items-center">
-                    <View className='gap-3'>
+                <View className="flex-row justify-end items-end">
+                    {/* <View className='gap-3'>
                         <Text className="font-semibold">
                             Saldo 
                             {paymentsMethods === "" && " Total"}
@@ -44,11 +44,11 @@ export default function Payments(){
                             {paymentsMethods === "OUTCOME" && " de Saidas"}
                         </Text>
                         <Text className="font-bold text-4xl">R$ {totalAmount.toFixed(2)}</Text>
-                    </View>
+                    </View> */}
 
                     
                     <View className="items-center gap-2">
-                        <TouchableOpacity className="bg-green-low rounded-full p-2 w-14 h-14 items-center justify-center" onPress={handleModal}>
+                        <TouchableOpacity className="bg-green-medium rounded-full p-2 w-14 h-14 items-center justify-center border-[0.5px]" onPress={handleModal}>
                             <SimpleLineIcons name="wallet" size={20} color="black" />
                         </TouchableOpacity>
                         <Text>Novo Pagamento</Text>
