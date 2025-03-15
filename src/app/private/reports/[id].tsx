@@ -1,29 +1,17 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { EvilIcons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { View, Text, TouchableOpacity } from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { colors } from "@/styles/colors";
 import { Dropdown, DropdownData } from "@/components/Dropdown";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { reportsModelView } from "./reportsModelView";
 import { YearReportGraph } from "@/components/YearReportGraph";
 
 export default function Reports() {
   const { id } = useLocalSearchParams();
-  const router = useRouter();
 
-  const { yearReport, handleSelectYear, availableYears, yearSelected } = reportsModelView(id);
-
-  function handleBackToHome() {
-    router.back();
-  }
-
-  const dropdownData = useMemo<DropdownData[]>(() => {
-    return availableYears.map((year) => ({
-      label: year.toString(),
-      value: year.toString(),
-    }));
-  }, [availableYears]);
+  const { yearReport, handleSelectYear, yearSelected, handleBackToHome, dropdownData } = reportsModelView(id);
 
   const selectedYearData = dropdownData.find(
     (item) => item.value === yearSelected.toString()
@@ -34,7 +22,7 @@ export default function Reports() {
   }
 
   return (
-    <View className="flex-1 items-center bg-gray-200">
+    <ScrollView className="flex-1 bg-gray-200" contentContainerStyle={{ alignItems: "center" }}>
       <LinearGradient
         colors={[colors.green.high, colors.green.medium]}
         style={{ width: "100%", padding: 20, paddingTop: 60, borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}
@@ -55,8 +43,8 @@ export default function Reports() {
       </LinearGradient>
 
       {yearReport.length > 0 && (
-          <YearReportGraph data={yearReport} />
+          <YearReportGraph data={yearReport} wallet_id={id} year={yearSelected}/>
       )}
-    </View>
+    </ScrollView>
   );
 }

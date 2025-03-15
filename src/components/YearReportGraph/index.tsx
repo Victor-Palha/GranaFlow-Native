@@ -2,28 +2,41 @@ import React, { useState } from 'react';
 import { BarChart } from 'react-native-gifted-charts';
 import { View, Text } from 'react-native';
 import { colors } from '@/styles/colors';
+import { API } from '@/api/config';
+import SecureStoragePersistence from '@/persistence/secureStorage';
+import { MONTHS } from '@/constants/MONTHS';
+import { MonthReportsInformation } from './MonthReportsInformation';
 
-type YearReport = {
+type MonthReportSubtype = {
+  total: string;
+  type: 'INCOME' | 'OUTCOME';
+  subtype: string;
+  percentage: string;
+};
+
+export type MonthReport = {
+  final_balance: string;
+  total_income: string;
+  total_outcome: string;
+  subtypes: MonthReportSubtype[];
+};
+
+export type YearReport = {
   final_balance: string;
   month: string; // Ex: "01", "02", ...
   income: string;
   outcome: string;
 };
 
-type Props = {
+type YearReportGraphProps = {
   data: YearReport[];
+  wallet_id: string | string[]
+  year: number
 };
 
-const MONTHS = [
-  '',
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-];
-
-export function YearReportGraph({ data }: Props) {
-  const [selectedValue, setSelectedValue] = useState<number | null>(null);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [selectedReportIndex, setSelectedReportIndex] = useState<number | null>(null);
+export function YearReportGraph({ wallet_id, data, year }: YearReportGraphProps) {
+  const [monthReports, setMonthReport] = useState<MonthReport | null>(null);
+  const [selectedReportIndex, setSelectedReportIndex] = useState<number>(0);
 
   const chartData = data.flatMap((report, index) => {
     const monthLabel = MONTHS[parseInt(report.month, 10)];
@@ -37,9 +50,8 @@ export function YearReportGraph({ data }: Props) {
         frontColor: colors.green.medium,
         spacing: 8,
         onPress: () => {
-          setSelectedValue(incomeValue);
-          setSelectedIndex(index * 2);
           setSelectedReportIndex(index);
+          fetchMonthReport(index + 1, year)
         },
       },
       {
@@ -48,9 +60,8 @@ export function YearReportGraph({ data }: Props) {
         frontColor: colors.red.medium,
         spacing: 8,
         onPress: () => {
-          setSelectedValue(outcomeValue);
-          setSelectedIndex(index * 2 + 1);
           setSelectedReportIndex(index);
+          fetchMonthReport(index + 1, year)
         },
       },
     ];
@@ -58,13 +69,32 @@ export function YearReportGraph({ data }: Props) {
 
   const selectedReport = selectedReportIndex !== null ? data[selectedReportIndex] : null;
 
+  async function fetchMonthReport(month: number, year: number) {
+    const api = API
+    const token = await SecureStoragePersistence.getJWT()
+    if (!token) {
+      return
+    }
+    api.setTokenAuth(token)
+    try {
+      const response = await api.server.get(`/api/wallet/${wallet_id}/reports/month`,
+        {
+          params: { year, month },
+        }
+      );
+
+      setMonthReport(response.data.report);
+    } catch (error) {
+      console.error('Erro ao buscar relatório mensal:', error);
+    }
+  }
+
   return (
     <View className="p-4 rounded-lg">
       <Text className="text-lg font-bold mb-5">
         Entradas e Saídas Mensais
       </Text>
 
-      {/* Legenda */}
       <View className="flex-row gap-4 mb-5">
         <View className="flex-row items-center">
           <View
@@ -105,42 +135,13 @@ export function YearReportGraph({ data }: Props) {
             )
           ) + 50
         }
-        renderTooltip={(_item: any, index: number) =>
-          index === selectedIndex ? (
-            <View className="absolute -top-7 bg-black px-2 py-1 rounded">
-              <Text className="text-white text-xs">
-                R$ {selectedValue?.toFixed(2)}
-              </Text>
-            </View>
-          ) : null
-        }
       />
 
-      {/* Informações abaixo do gráfico */}
       {selectedReport && (
-        <View className="mt-6 p-4 rounded-lg border border-zinc-200 bg-gray-300">
-          <Text className="text-base font-semibold mb-2">
-            {MONTHS[parseInt(selectedReport.month, 10)]}
-          </Text>
-          <View className="flex-row justify-between mb-1">
-            <Text className="text-zinc-500">Entradas:</Text>
-            <Text className="text-green-600 font-medium">
-              R$ {parseFloat(selectedReport.income).toFixed(2)}
-            </Text>
-          </View>
-          <View className="flex-row justify-between mb-1">
-            <Text className="text-zinc-500">Saídas:</Text>
-            <Text className="text-red-600 font-medium">
-              R$ {parseFloat(selectedReport.outcome).toFixed(2)}
-            </Text>
-          </View>
-          <View className="flex-row justify-between">
-            <Text className="text-zinc-500">Saldo final:</Text>
-            <Text className={`font-medium ${parseFloat(selectedReport.final_balance) >= 0 ? 'text-green-medium' : 'text-red-medium'}`}>
-              R$ {parseFloat(selectedReport.final_balance).toFixed(2)}
-            </Text>
-          </View>
-        </View>
+        <MonthReportsInformation
+          selectedReport={selectedReport}
+          monthReports={monthReports}
+        />
       )}
     </View>
   );
