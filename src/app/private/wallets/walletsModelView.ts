@@ -1,4 +1,5 @@
 import { API } from "@/api/config"
+import { useAPI } from "@/hooks/useApi"
 import SecureStoragePersistence from "@/persistence/secureStorage"
 import { AxiosError } from "axios"
 import { useEffect, useState } from "react"
@@ -18,8 +19,10 @@ export function walletsModelView(){
         }
         setIsLoadingWallets(true)
         try {
-            const api = API
-            api.setTokenAuth(token)
+            const api = await useAPI()
+            if(!api){
+                return;
+            }
             const response = await api.server.get("/api/wallet")
             setWallets(response.data.wallets)
         } catch (error) {

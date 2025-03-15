@@ -1,12 +1,14 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useFonts, DMSans_700Bold, DMSans_700Bold_Italic } from '@expo-google-fonts/dm-sans';
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from "@/styles/colors";
 import { AuthContext } from "@/contexts/auth/authContext";
+import { router } from "expo-router";
 
 export default function Index(){
-    const {onLogin, validateToken, isLoading} = useContext(AuthContext)
+    const {onLogin, isLoading, authState} = useContext(AuthContext)
+    
 
     const [isFontLoades, setIsFontLoaded] = useState(false)
     const [fontsLoaded] = useFonts({
@@ -20,11 +22,15 @@ export default function Index(){
         fontsLoaded ? setIsFontLoaded(true) : setIsFontLoaded(false)
     },[fontsLoaded])
 
+    useEffect(()=>{
+        if(authState.authenticated){
+            router.replace("/private/wallets")
+        }
+    }, [authState])
+
     if (!isFontLoades) {
         return null;
     }
-
-    validateToken()
 
     return (
         <LinearGradient

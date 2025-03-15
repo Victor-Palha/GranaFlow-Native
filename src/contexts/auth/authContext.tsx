@@ -5,7 +5,7 @@ import { URLS } from "@/constants/URLS";
 import { LocalStorage, UserProfile } from "@/persistence/localStorage";
 import SecureStoragePersistence from "@/persistence/secureStorage";
 import { router } from "expo-router";
-import { API } from "@/api/config";
+import { useAPI } from "@/hooks/useApi";
 
 type AuthState = {
     user_id: string | null,
@@ -16,8 +16,7 @@ interface AuthProps {
     authState: AuthState,
     isLoading: boolean,
     onLogin: () => Promise<any>,
-    onLogout(): Promise<void>,
-    validateToken(): Promise<void>
+    onLogout(): Promise<void>
 }
 
 export const AuthContext = createContext<AuthProps>({} as AuthProps);
@@ -25,26 +24,7 @@ export const AuthContext = createContext<AuthProps>({} as AuthProps);
 export function AuthContextProvider({children}: {children: React.ReactNode}){
     const [authState, setAuthState] = useState<AuthState>({authenticated: null, user_id: null});
     const [isLoading, setIsLoading] = useState<boolean>(false)
-
-    async function validateToken() {
-        const api = API
-        const token = await SecureStoragePersistence.getJWT()
-        if(!token){
-            setAuthState({authenticated: null, user_id: null})
-            return
-        }
-        api.setTokenAuth(token)
-        const response = await api.server.get("/api/refresh")
-        if(response.status === 200){
-            await SecureStoragePersistence.setJWT(response.data.token)
-            setAuthState({
-                authenticated: true,
-                user_id: response.data.user_id
-            })
-            router.replace('/private/wallets')
-        }
-    }
-
+      
     async function onLogin(){
         setIsLoading(true)
         try {
@@ -53,6 +33,7 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
             if (result.type === 'success') {
                 const params = new URLSearchParams(result.url.split('?')[1]);
                 const token = params.get('token') ?? '';
+                const refresh = params.get('refresh_token') ?? '';
 
                 const user = {
                   id: params.get('id'),
@@ -63,13 +44,14 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
 
                 Alert.alert('Sucesso', 'Autenticação concluída!');
 
-                await SecureStoragePersistence.setJWT(token)
-                await LocalStorage.setUserProfile(user)
-                
                 setAuthState({
                     authenticated: true,
                     user_id: user.id
                 })
+
+                await SecureStoragePersistence.setRefreshJWT(refresh)
+                await SecureStoragePersistence.setJWT(token)
+                await LocalStorage.setUserProfile(user)
 
                 router.replace('/private/wallets')
             } else {
@@ -92,15 +74,47 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
     }
 
     async function onLogout(){
-
+        await SecureStoragePersistence.clearAll()
+        await LocalStorage.deleteAll();
+        setAuthState({
+            authenticated: false,
+            user_id: null
+        })
+        router.replace("/")
     }
+
+    async function validateAuth() {
+        try{
+            const api = await useAPI()
+            if(api){
+                const user = await LocalStorage.getUserProfile()
+                setAuthState({
+                    authenticated: true,
+                    user_id: user.id
+                })
+            }else {
+                setAuthState({
+                    authenticated: false,
+                    user_id: null
+                })
+            }
+        } catch(error){
+            setAuthState({
+                authenticated: false,
+                user_id: null
+            })
+        }
+    }
+
+    useEffect(()=>{
+        validateAuth()
+    }, [])
 
     const values = {
         authState,
         isLoading,
         onLogin,
-        onLogout,
-        validateToken
+        onLogout
     }
 
     return (
