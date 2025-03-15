@@ -5,6 +5,7 @@ import { URLS } from "@/constants/URLS";
 import { LocalStorage, UserProfile } from "@/persistence/localStorage";
 import SecureStoragePersistence from "@/persistence/secureStorage";
 import { router } from "expo-router";
+import { API } from "@/api/config";
 
 type AuthState = {
     user_id: string | null,
@@ -15,7 +16,8 @@ interface AuthProps {
     authState: AuthState,
     isLoading: boolean,
     onLogin: () => Promise<any>,
-    onLogout(): Promise<void>
+    onLogout(): Promise<void>,
+    validateToken(): Promise<void>
 }
 
 export const AuthContext = createContext<AuthProps>({} as AuthProps);
@@ -23,6 +25,25 @@ export const AuthContext = createContext<AuthProps>({} as AuthProps);
 export function AuthContextProvider({children}: {children: React.ReactNode}){
     const [authState, setAuthState] = useState<AuthState>({authenticated: null, user_id: null});
     const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    async function validateToken() {
+        const api = API
+        const token = await SecureStoragePersistence.getJWT()
+        if(!token){
+            setAuthState({authenticated: null, user_id: null})
+            return
+        }
+        api.setTokenAuth(token)
+        const response = await api.server.get("/api/refresh")
+        if(response.status === 200){
+            await SecureStoragePersistence.setJWT(response.data.token)
+            setAuthState({
+                authenticated: true,
+                user_id: response.data.user_id
+            })
+            router.replace('/private/wallets')
+        }
+    }
 
     async function onLogin(){
         setIsLoading(true)
@@ -78,7 +99,8 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
         authState,
         isLoading,
         onLogin,
-        onLogout
+        onLogout,
+        validateToken
     }
 
     return (

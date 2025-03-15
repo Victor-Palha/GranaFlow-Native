@@ -6,7 +6,7 @@ import { colors } from "@/styles/colors";
 import { AuthContext } from "@/contexts/auth/authContext";
 
 export default function Index(){
-    const {onLogin, isLoading} = useContext(AuthContext)
+    const {onLogin, validateToken, isLoading} = useContext(AuthContext)
 
     const [isFontLoades, setIsFontLoaded] = useState(false)
     const [fontsLoaded] = useFonts({
@@ -23,6 +23,8 @@ export default function Index(){
     if (!isFontLoades) {
         return null;
     }
+
+    validateToken()
 
     return (
         <LinearGradient
