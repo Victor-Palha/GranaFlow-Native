@@ -10,7 +10,7 @@ type MonthReportsInformationProps = {
 }
 export function MonthReportsInformation({ selectedReport, monthReports, currentMonth }: MonthReportsInformationProps) {
     return (
-        <View className="mt-6 p-4 rounded-lg border border-zinc-200 bg-gray-300 shadow-black shadow mb-10">
+        <View className="mt-6 p-4 rounded-lg border border-zinc-200 bg-gray-300 shadow-black shadow mb-10 min-w-[90%] max-w-[90%]">
             <Text className="text-base font-semibold mb-2">
                 {MONTHS[parseInt(selectedReport.month, 10)]}
             </Text>
@@ -47,7 +47,7 @@ export function MonthReportsInformation({ selectedReport, monthReports, currentM
                 const isIncome = type === 'INCOME';
 
                 return (
-                    <View key={type} className="w-[90%] mt-6">
+                    <View key={type} className="mt-6">
                         <Text className="font-bold text-lg mb-3 text-zinc-700">
                             {isIncome ? 'Entradas por categoria' : 'Saídas por categoria'}
                         </Text>
