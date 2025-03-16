@@ -1,5 +1,6 @@
 import { API } from "@/api/config";
 import { DropdownData } from "@/components/Dropdown";
+import { useAPI } from "@/hooks/useApi";
 import SecureStoragePersistence from "@/persistence/secureStorage";
 import { router } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
@@ -16,13 +17,10 @@ export function reportsModelView(wallet_id: string | string[]) {
     const [yearSelected, setYearSelected] = useState(new Date().getFullYear())
     const [yearReport, setYearReport] = useState<YearReport[]>([])
     async function getReports() {
-        const api = API
-        const token = await SecureStoragePersistence.getJWT()
-        if (!token) {
-            return
+        const api = await useAPI();
+        if (!api) {
+            return;
         }
-        api.setTokenAuth(token)
-
         const response = await api.server.get(`/api/wallet/${wallet_id}/reports/annual`, {
             params: {
                 year: yearSelected

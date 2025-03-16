@@ -5,6 +5,7 @@ import { Dropdown, DropdownData } from "@/components/Dropdown";
 import { API } from "@/api/config";
 import SecureStoragePersistence from "@/persistence/secureStorage";
 import { AxiosError } from "axios";
+import { useAPI } from "@/hooks/useApi";
 
 type ModalCreateWalletProps = {
     isModalOpen: boolean,
@@ -20,12 +21,10 @@ export function ModalCreateWallet({isModalOpen, closeModal, setTrackWallets}: Mo
         if(nameWallet.length < 3){
             return Alert.alert("Aviso", "Por favor, dê um nome com mais de 3 letras para sua carteira")
         }
-        const token = await SecureStoragePersistence.getJWT()
-        if(!token){
-            return Alert.alert("Erro", "Erro ao conectar na sua conta.")
+        const api = await useAPI();
+        if (!api) {
+            return;
         }
-        const api = API
-        api.setTokenAuth(token)
         setIsCreatingWallet(true)
         try{
             await api.server.post("/api/wallet", {name: nameWallet, type: selectedWalletType.value})

@@ -6,6 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { API } from "@/api/config";
 import SecureStoragePersistence from "@/persistence/secureStorage";
 import { AxiosError } from "axios";
+import { useAPI } from "@/hooks/useApi";
 
 type ModalCreateTransactionProps = {
     wallet_id: string | string[],
@@ -30,13 +31,10 @@ export function ModalCreateTransaction({wallet_id, isModalOpen, closeModal, setT
     if(nameTransaction.length < 3 || amountTransaction.length < 1){
         Alert.alert("Aviso", "Por favor, preencha os campos de nome e valor corretamente!")
     }
-    const api = API
-    const token = await SecureStoragePersistence.getJWT()
-    if(!token){
-        return Alert.alert("Erro", "Não foi possível se conectar a sua conta!")
+    const api = await useAPI();
+    if (!api) {
+        return;
     }
-
-    api.setTokenAuth(token)
     if(!isRecurring){
         createSingleTransaction(api)
         return

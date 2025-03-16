@@ -1,5 +1,6 @@
 import { Transaction } from "@/@types/transactions"
 import { API } from "@/api/config"
+import { useAPI } from "@/hooks/useApi"
 import SecureStoragePersistence from "@/persistence/secureStorage"
 import { router } from "expo-router"
 import { useEffect, useState } from "react"
@@ -30,12 +31,10 @@ export function paymentsModelView(wallet_id: string | string[]){
     }
 
     async function getAllTransactionsBasedOnMethod(){
-        const api = API;
-        const token = await SecureStoragePersistence.getJWT();
-        if (!token) {
+        const api = await useAPI();
+        if (!api) {
             return;
         }
-        api.setTokenAuth(token);
         setIsLoadingTransactions(true)
         try {
             const response = await api.server.get("/api/transaction", {

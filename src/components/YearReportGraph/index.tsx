@@ -7,6 +7,7 @@ import SecureStoragePersistence from '@/persistence/secureStorage';
 import { MONTHS } from '@/constants/MONTHS';
 import { MonthReportsInformation } from './MonthReportsInformation';
 import { Transaction } from '@/@types/transactions';
+import { useAPI } from '@/hooks/useApi';
 
 type MonthReportSubtype = {
   total: string;
@@ -72,12 +73,10 @@ export function YearReportGraph({ wallet_id, data, year }: YearReportGraphProps)
   const selectedReport = selectedReportIndex !== null ? data[selectedReportIndex] : null;
 
   async function fetchMonthReport(month: number, year: number) {
-    const api = API
-    const token = await SecureStoragePersistence.getJWT()
-    if (!token) {
-      return
+    const api = await useAPI();
+    if (!api) {
+        return;
     }
-    api.setTokenAuth(token)
     try {
       const response = await api.server.get(`/api/wallet/${wallet_id}/reports/month`,
         {

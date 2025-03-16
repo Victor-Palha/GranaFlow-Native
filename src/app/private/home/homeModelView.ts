@@ -1,5 +1,6 @@
 import { Transaction } from "@/@types/transactions";
 import { API } from "@/api/config";
+import { useAPI } from "@/hooks/useApi";
 import SecureStoragePersistence from "@/persistence/secureStorage";
 import { useEffect, useState } from "react";
 
@@ -9,12 +10,10 @@ export function HomeModelView(wallet_id: string | string[]){
     const [currentBalance, setCurrentBalance] = useState(0.0)
 
     async function fetchTransactions(wallet_id: string | string[]) {
-        const api = API;
-        const token = await SecureStoragePersistence.getJWT();
-        if (!token) {
+        const api = await useAPI();
+        if (!api) {
             return;
         }
-        api.setTokenAuth(token);
         setIsLoadingLatestTransactions(true)
         try {
             const response = await api.server.get("/api/transaction", {
