@@ -6,6 +6,7 @@ import { API } from '@/api/config';
 import SecureStoragePersistence from '@/persistence/secureStorage';
 import { MONTHS } from '@/constants/MONTHS';
 import { MonthReportsInformation } from './MonthReportsInformation';
+import { Transaction } from '@/@types/transactions';
 
 type MonthReportSubtype = {
   total: string;
@@ -19,6 +20,7 @@ export type MonthReport = {
   total_income: string;
   total_outcome: string;
   subtypes: MonthReportSubtype[];
+  transactions: Transaction[]
 };
 
 export type YearReport = {
@@ -141,6 +143,7 @@ export function YearReportGraph({ wallet_id, data, year }: YearReportGraphProps)
         <MonthReportsInformation
           selectedReport={selectedReport}
           monthReports={monthReports}
+          currentMonth={selectedReportIndex+1 === new Date().getMonth()+1}
         />
       )}
     </View>

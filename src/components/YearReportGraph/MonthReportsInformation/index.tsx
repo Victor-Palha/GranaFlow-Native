@@ -1,12 +1,14 @@
 import { MONTHS } from "@/constants/MONTHS";
 import { Text, View } from "react-native";
 import { MonthReport, YearReport } from "..";
+import { Transactions } from "@/components/Transactions";
 
 type MonthReportsInformationProps = {
     selectedReport: YearReport
     monthReports: MonthReport | null
+    currentMonth: boolean
 }
-export function MonthReportsInformation({ selectedReport, monthReports }: MonthReportsInformationProps) {
+export function MonthReportsInformation({ selectedReport, monthReports, currentMonth }: MonthReportsInformationProps) {
     return (
         <View className="mt-6 p-4 rounded-lg border border-zinc-200 bg-gray-300 shadow-black shadow mb-10">
             <Text className="text-base font-semibold mb-2">
@@ -26,7 +28,7 @@ export function MonthReportsInformation({ selectedReport, monthReports }: MonthR
                 </Text>
             </View>
             <View className="flex-row justify-between mb-4">
-                <Text className="text-zinc-500">Saldo final:</Text>
+                <Text className="text-zinc-500 font-bold">{currentMonth ? "Saldo Atual: " : "Saldo previsto: "}</Text>
                 <Text
                     className={`font-bold ${parseFloat(selectedReport.final_balance) >= 0
                             ? 'text-green-medium'
@@ -74,6 +76,11 @@ export function MonthReportsInformation({ selectedReport, monthReports }: MonthR
                     </View>
                 );
             })}
+            <View className="mt-10">
+                {monthReports?.transactions.map((item)=> (
+                    <Transactions data={item} key={item.id}/>
+                ))}
+            </View>
         </View>
     )
 }
