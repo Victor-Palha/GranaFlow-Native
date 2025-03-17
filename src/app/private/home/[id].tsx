@@ -7,23 +7,32 @@ import { Transactions } from '@/components/Transactions';
 
 export default function Home() {
   const { id } = useLocalSearchParams();
-  const {isLoadingLatestTransactions, latestTransactions, currentBalance} = HomeModelView(id)
+  const { isLoadingLatestTransactions, latestTransactions, currentBalance, groupTransactionsByMonth } = HomeModelView(id);
+
+  const groupedTransactions = groupTransactionsByMonth(latestTransactions);
+
   return (
     <ScrollView className="flex-1 bg-gray-200" contentContainerStyle={{ alignItems: "center" }}>
-        <Header total={currentBalance}/>
-        <Nav walletId={id}/>
+      <Header total={currentBalance} />
+      <Nav walletId={id} />
 
-        <View className='gap-4 px-10'>
-          <Text className="text-2xl text-center text-gray-900 mb-10" style={{ fontFamily: 'PlaywriteITModerna-Regular' }}>
-            Últimas Transações
-          </Text>
-          {latestTransactions.length > 0 &&  latestTransactions.map(transaction => (
+      <View className='gap-4 px-10'>
+        <Text className="text-2xl text-center text-gray-900 mb-10" style={{ fontFamily: 'PlaywriteITModerna-Regular' }}>
+          Últimas Transações
+        </Text>
+
+        {Object.entries(groupedTransactions).map(([monthYear, transactions]) => (
+          <View key={monthYear} className="mb-1">
+            <Text className="text-lg font-semibold text-gray-900 mb-6">{monthYear}</Text>
+            {transactions.map((transaction) => (
               <Transactions
                 key={transaction.id}
                 data={transaction}
               />
-          ))}
-        </View>
+            ))}
+          </View>
+        ))}
+      </View>
     </ScrollView>
   );
 }

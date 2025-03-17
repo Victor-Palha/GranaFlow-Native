@@ -1,4 +1,5 @@
 import { Transaction } from "@/@types/transactions";
+import { MONTHS } from "@/constants/MONTHS";
 import { useAPI } from "@/hooks/useApi";
 import { useEffect, useState } from "react";
 
@@ -39,6 +40,23 @@ export function HomeModelView(wallet_id: string | string[]){
         }
     }
 
+    function groupTransactionsByMonth(transactions: Transaction[]) {
+        return transactions.reduce<Record<string, Transaction[]>>((acc, transaction) => {
+          const date = new Date(transaction.transaction_date);
+          const month = date.getMonth() + 1;
+          const year = date.getFullYear();
+          const label = `${MONTHS[month]} ${year}`;
+      
+          if (!acc[label]) {
+            acc[label] = [];
+          }
+      
+          acc[label].push(transaction);
+          return acc;
+        }, {});
+    }
+      
+
     useEffect(()=>{
         fetchTransactions(wallet_id)
     }, [wallet_id])
@@ -46,7 +64,8 @@ export function HomeModelView(wallet_id: string | string[]){
     const values = {
         latestTransactions,
         currentBalance,
-        isLoadingLatestTransactions
+        isLoadingLatestTransactions,
+        groupTransactionsByMonth
     }
 
     return values
