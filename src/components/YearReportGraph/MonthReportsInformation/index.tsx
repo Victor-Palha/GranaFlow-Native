@@ -1,7 +1,9 @@
 import { MONTHS } from "@/constants/MONTHS";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { MonthReport, YearReport } from "..";
 import { Transactions } from "@/components/Transactions";
+import { useEffect, useState } from "react";
+import { Transaction } from "@/@types/transactions";
 
 type MonthReportsInformationProps = {
     selectedReport: YearReport
@@ -9,6 +11,32 @@ type MonthReportsInformationProps = {
     currentMonth: boolean
 }
 export function MonthReportsInformation({ selectedReport, monthReports, currentMonth }: MonthReportsInformationProps) {
+    const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null);
+    const [selectedTransactionsBasedOnSubtype, setSelectedTransactionsBasedOnSubtype] = useState<Transaction[]>([])
+
+    function selectTransactionsBySubtype(subtype: string, transactions: Transaction[]) {
+        const grouped = transactions.reduce<Record<string, Transaction[]>>((acc, transaction) => {
+          if (!acc[transaction.subtype]) {
+            acc[transaction.subtype] = [];
+          }
+          acc[transaction.subtype].push(transaction);
+          return acc;
+        }, {});
+      
+        setSelectedTransactionsBasedOnSubtype(grouped[subtype] ?? []);
+      }
+
+    useEffect(()=>{
+        if(selectedSubtype && monthReports && monthReports.transactions){
+            selectTransactionsBySubtype(selectedSubtype, monthReports.transactions)
+        }
+    }, [selectedSubtype])
+
+    useEffect(()=>{
+        setSelectedSubtype(null)
+        setSelectedTransactionsBasedOnSubtype([])
+    }, [selectedReport])
+
     return (
         <View className="mt-6 p-4 rounded-lg border border-zinc-200 bg-gray-300 shadow-black shadow mb-10 min-w-[90%] max-w-[90%]">
             <Text className="text-base font-semibold mb-2">
@@ -59,17 +87,23 @@ export function MonthReportsInformation({ selectedReport, monthReports, currentM
 
                             return (
                                 <View key={`${type}-${subtype.subtype}`} className="mb-3">
+                                    <TouchableOpacity
+                                        onPress={() => setSelectedSubtype(subtype.subtype)}
+                                        activeOpacity={0.7}
+                                    >
                                     <View className="flex-row justify-between mb-1">
                                         <Text className="text-zinc-600 font-medium">{subtype.subtype}</Text>
                                         <Text className="text-zinc-800 font-semibold">{percentage.toFixed(1)}%</Text>
                                     </View>
 
-                                    <View className={`w-full h-3 rounded-full ${bgBar} overflow-hidden`}>
-                                        <View
+                                    
+                                        <View className={`w-full h-3 rounded-full ${bgBar} overflow-hidden`}>
+                                            <View
                                             className={`h-3 ${barColor}`}
                                             style={{ width: `${percentage}%` }}
-                                        />
-                                    </View>
+                                            />
+                                        </View>
+                                    </TouchableOpacity>
                                 </View>
                             );
                         })}
@@ -77,7 +111,7 @@ export function MonthReportsInformation({ selectedReport, monthReports, currentM
                 );
             })}
             <View className="mt-10">
-                {monthReports?.transactions.map((item)=> (
+                {selectedTransactionsBasedOnSubtype.map((item)=> (
                     <Transactions data={item} key={item.id}/>
                 ))}
             </View>

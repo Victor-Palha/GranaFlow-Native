@@ -1,7 +1,5 @@
 import { Transaction } from "@/@types/transactions";
-import { API } from "@/api/config";
 import { useAPI } from "@/hooks/useApi";
-import SecureStoragePersistence from "@/persistence/secureStorage";
 import { useEffect, useState } from "react";
 
 export function HomeModelView(wallet_id: string | string[]){
@@ -19,7 +17,7 @@ export function HomeModelView(wallet_id: string | string[]){
             const response = await api.server.get("/api/transaction", {
                 params: {
                     wallet_id,
-                    limit: 5,
+                    limit: null,
                     is_until_today: true
                 }
             });

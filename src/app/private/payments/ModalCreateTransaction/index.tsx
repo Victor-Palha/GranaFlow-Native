@@ -67,6 +67,10 @@ export function ModalCreateTransaction({wallet_id, isModalOpen, closeModal, setT
   }
 
   async function createRecurrentTransaction(api: typeof API) {
+    if(recurrenceEnd < recurrenceStart){
+        Alert.alert("Erro", "Por favor, escolha uma data final menor que a inicial!")
+        return
+    }
     try {
       const data = {
         name: nameTransaction,

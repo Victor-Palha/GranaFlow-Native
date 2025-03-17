@@ -1,7 +1,7 @@
 import { Header } from '@/components/Header';
 import { Nav } from '@/components/Nav';
 import { useLocalSearchParams } from 'expo-router';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, ScrollView, Text, View } from 'react-native';
 import { HomeModelView } from './homeModelView';
 import { Transactions } from '@/components/Transactions';
 
@@ -9,7 +9,7 @@ export default function Home() {
   const { id } = useLocalSearchParams();
   const {isLoadingLatestTransactions, latestTransactions, currentBalance} = HomeModelView(id)
   return (
-    <View className="flex-1 items-center bg-gray-200">
+    <ScrollView className="flex-1 bg-gray-200" contentContainerStyle={{ alignItems: "center" }}>
         <Header total={currentBalance}/>
         <Nav walletId={id}/>
 
@@ -17,20 +17,13 @@ export default function Home() {
           <Text className="text-2xl text-center text-gray-900 mb-10" style={{ fontFamily: 'PlaywriteITModerna-Regular' }}>
             Últimas Transações
           </Text>
-          {latestTransactions.length > 0 && (
-            <FlatList
-              data={latestTransactions}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
-                <Transactions
-                  key={item.id}
-                  data={item}
-                />
-              )}
-              contentContainerStyle={{ gap: 16 }}
-            />
-          )}
+          {latestTransactions.length > 0 &&  latestTransactions.map(transaction => (
+              <Transactions
+                key={transaction.id}
+                data={transaction}
+              />
+          ))}
         </View>
-    </View>
+    </ScrollView>
   );
 }
