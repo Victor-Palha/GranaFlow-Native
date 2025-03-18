@@ -1,46 +1,27 @@
 import { Transaction } from "@/@types/transactions";
 import { MONTHS } from "@/constants/MONTHS";
 import { TransactionContext } from "@/contexts/transaction/transactionContext";
-import { useAPI } from "@/hooks/useApi";
 import { useContext, useEffect, useState } from "react";
 
-export function HomeModelView(wallet_id: string | string[]){
+export function HomeModelView(){
     const {isTransactionsLoading, transactions} = useContext(TransactionContext)
-    // const [isLoadingLatestTransactions, setIsLoadingLatestTransactions] = useState(false)
-    const [latestTransactions, setLatestTransactions] = useState<Transaction[]>([])
     const [currentBalance, setCurrentBalance] = useState(0.0)
 
-    // async function fetchTransactions(wallet_id: string | string[]) {
-    //     const api = await useAPI();
-    //     if (!api) {
-    //         return;
-    //     }
-    //     setIsLoadingLatestTransactions(true)
-    //     try {
-    //         const response = await api.server.get("/api/transaction", {
-    //             params: {
-    //                 wallet_id,
-    //                 limit: null,
-    //                 is_until_today: true
-    //             }
-    //         });
-
-    //         const currentBalanceResponse = await api.server.get("/api/transaction/balance", {
-    //             params: {
-    //                 wallet_id
-    //             }
-    //         })
-    //         const {current_balance} = currentBalanceResponse.data
-    //         const {transactions} = response.data;
-    //         setLatestTransactions(transactions)
-    //         setCurrentBalance(current_balance)
-    //     } catch (error) {
-    //         console.error("Erro ao buscar transações:", error);
-    //         throw error;
-    //     } finally {
-    //         setIsLoadingLatestTransactions(false)
-    //     }
-    // }
+    function calculateCurrentBalance(transactions: Transaction[]) {
+      const currentBalance = transactions.reduce((acc, transaction) => {
+        const amount = parseFloat(transaction.amount);
+    
+        if (transaction.type === "INCOME") {
+          return acc + amount;
+        } else if (transaction.type === "OUTCOME") {
+          return acc - amount;
+        }
+    
+        return acc;
+      }, 0);
+    
+      setCurrentBalance(currentBalance)
+    }
 
     function groupTransactionsByMonth(transactions: Transaction[]) {
         return transactions.reduce<Record<string, Transaction[]>>((acc, transaction) => {
@@ -57,11 +38,11 @@ export function HomeModelView(wallet_id: string | string[]){
           return acc;
         }, {});
     }
-      
 
-    // useEffect(()=>{
-    //     fetchTransactions(wallet_id)
-    // }, [wallet_id])
+    useEffect(()=>{
+      calculateCurrentBalance(transactions)
+    }, [transactions])
+
 
     const values = {
         transactions,

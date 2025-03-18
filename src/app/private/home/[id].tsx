@@ -7,7 +7,7 @@ import { Transactions } from '@/components/Transactions';
 
 export default function Home() {
   const { id } = useLocalSearchParams();
-  const { transactions, isTransactionsLoading, currentBalance, groupTransactionsByMonth } = HomeModelView(id);
+  const { transactions, isTransactionsLoading, currentBalance, groupTransactionsByMonth } = HomeModelView();
 
   const groupedTransactions = groupTransactionsByMonth(transactions);
 
