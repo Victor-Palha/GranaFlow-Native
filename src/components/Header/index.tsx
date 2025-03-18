@@ -1,26 +1,32 @@
 import { TransactionContext } from "@/contexts/transaction/transactionContext";
 import { colors } from "@/styles/colors";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type HeaderProps = {
     total: number
 }
 export function Header({total}: HeaderProps){
     const {isTransactionsLoading} = useContext(TransactionContext)
+
+    const handleBackToWallets = () => {
+        router.back();
+    };
+
     return (
         <LinearGradient
             colors={[colors.green.high, colors.green.medium]}
             style={styles.background}
         >            
             <View className="flex-row items-center justify-between w-full">
+                <TouchableOpacity onPress={handleBackToWallets}>
+                    <Ionicons name="chevron-back-outline" size={32} color="white" />
+                </TouchableOpacity>
                 <View>
                     {/* Profile Picture */}
-                </View>
-                <View>
-                    <MaterialIcons name="logout" size={32} color="white" />
                 </View>
             </View>
             {!isTransactionsLoading && (
