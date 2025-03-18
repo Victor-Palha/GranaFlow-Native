@@ -1,12 +1,13 @@
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import { colors } from "@/styles/colors";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useLocalSearchParams } from 'expo-router';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import { Methods, paymentsModelView } from './paymentsModelView';
 import { ModalCreateTransaction } from './ModalCreateTransaction';
 import { Transactions } from '@/components/Transactions';
+import { TransactionsLoading } from '@/components/TrasactionsLoading';
 
 export default function Payments(){
     const { id } = useLocalSearchParams();
@@ -22,7 +23,7 @@ export default function Payments(){
     } = paymentsModelView()
 
     return (
-        <View className="flex-1 items-center bg-gray-200">
+        <ScrollView className="flex-1 bg-gray-200" contentContainerStyle={{ alignItems: "center" }}>
             {/* Header */}
             <LinearGradient colors={[colors.green.high, colors.green.medium]} style={styles.background}>
                 <TouchableOpacity onPress={handleBackToHome}>
@@ -61,16 +62,23 @@ export default function Payments(){
                         data={transactions}
                     />
                 ))}
-                {/* {isLoadingTransactions && (
-                    <Loading/>
-                )} */}
+                {isTransactionsLoading && (
+                    <View className="flex flex-col gap-2 justify-center mx-auto">
+                        <TransactionsLoading/>
+                        <TransactionsLoading/>
+                        <TransactionsLoading/>
+                        <TransactionsLoading/>
+                        <TransactionsLoading/>
+                        <TransactionsLoading/>
+                    </View>
+                )}
             </View>
             <ModalCreateTransaction
                 wallet_id={id}
                 closeModal={handleModal}
                 isModalOpen={isModalOpen}
             />
-        </View>
+        </ScrollView>
     )
 }
 

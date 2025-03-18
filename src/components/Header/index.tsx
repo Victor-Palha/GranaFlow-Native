@@ -1,41 +1,15 @@
+import { TransactionContext } from "@/contexts/transaction/transactionContext";
 import { colors } from "@/styles/colors";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 type HeaderProps = {
     total: number
 }
 export function Header({total}: HeaderProps){
-    // const [hasNotification, setHasNotification] = useState<boolean>(false)
-    // const [notifications, setNotifications] = useState<NotificationProps[]>([] as NotificationProps[])
-    // const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
-
-    // function handleSignout(){
-    //     if(!window.confirm("Deseja realmente sair?")) return;
-
-    //     localStorage.removeItem('@forno:auth');
-    //     window.document.location.href = '/login';
-    // }
-
-    // async function getAllNotifications(){
-    //     const result = await api.get("/notifications/all")
-    //     if(result.data.length > 0){
-    //         setHasNotification(true)
-    //     }
-    //     setNotifications(result.data)
-    // }
-
-    // async function verifyIfIsSomeoneBirthday(){
-    //     // await api.get("/notifications/check-birthdays")
-    // }
-
-    // useEffect(()=>{
-    //     verifyIfIsSomeoneBirthday()
-    //     getAllNotifications()
-    // }, [])
-
+    const {isTransactionsLoading} = useContext(TransactionContext)
     return (
         <LinearGradient
             colors={[colors.green.high, colors.green.medium]}
@@ -49,11 +23,17 @@ export function Header({total}: HeaderProps){
                     <MaterialIcons name="logout" size={32} color="white" />
                 </View>
             </View>
-
-            <View className="flex flex-col justify-end items-center pt-20">
-                <Text className="font-semibold text-white">Saldo Atual</Text>
-                <Text className="text-5xl font-bold text-white mt-2">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total)}</Text>
-            </View>
+            {!isTransactionsLoading ? (
+                <View className="flex flex-col justify-end items-center pt-20">
+                    <Text className="font-semibold text-white">Saldo Atual</Text>
+                    <Text className="text-5xl font-bold text-white mt-2">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total)}</Text>
+                </View>
+            ) : (
+                <View className="flex flex-col justify-end items-center pt-20 animate-pulse">
+                    <View className="h-4 bg-gray-300 rounded w-24" />
+                    <View className="h-10 bg-gray-300 rounded w-40 mt-4" />
+                </View>
+            )}
         </LinearGradient>
     )
 }

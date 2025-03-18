@@ -4,6 +4,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { FlatList, ScrollView, Text, View } from 'react-native';
 import { HomeModelView } from './homeModelView';
 import { Transactions } from '@/components/Transactions';
+import { TransactionsLoading } from '@/components/TrasactionsLoading';
 
 export default function Home() {
   const { id } = useLocalSearchParams();
@@ -21,7 +22,7 @@ export default function Home() {
           Últimas Transações
         </Text>
 
-        {Object.entries(groupedTransactions).map(([monthYear, transactions]) => (
+        {!isTransactionsLoading && Object.entries(groupedTransactions).map(([monthYear, transactions]) => (
           <View key={monthYear} className="mb-1">
             <Text className="text-lg font-semibold text-gray-900 mb-6">{monthYear}</Text>
             {transactions.map((transaction) => (
@@ -32,6 +33,15 @@ export default function Home() {
             ))}
           </View>
         ))}
+        {isTransactionsLoading && (
+          <View  className="mb-1">
+            <TransactionsLoading/>
+            <TransactionsLoading/>
+            <TransactionsLoading/>
+            <TransactionsLoading/>
+            <TransactionsLoading/>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
