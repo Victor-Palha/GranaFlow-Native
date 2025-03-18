@@ -7,9 +7,9 @@ import { Transactions } from '@/components/Transactions';
 
 export default function Home() {
   const { id } = useLocalSearchParams();
-  const { isLoadingLatestTransactions, latestTransactions, currentBalance, groupTransactionsByMonth } = HomeModelView(id);
+  const { transactions, isTransactionsLoading, currentBalance, groupTransactionsByMonth } = HomeModelView(id);
 
-  const groupedTransactions = groupTransactionsByMonth(latestTransactions);
+  const groupedTransactions = groupTransactionsByMonth(transactions);
 
   return (
     <ScrollView className="flex-1 bg-gray-200" contentContainerStyle={{ alignItems: "center" }}>

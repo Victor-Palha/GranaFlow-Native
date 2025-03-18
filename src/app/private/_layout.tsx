@@ -1,4 +1,5 @@
 import { AuthContext } from "@/contexts/auth/authContext";
+import { TransactionContextProvider } from "@/contexts/transaction/transactionContext";
 import { colors } from "@/styles/colors";
 import { router, Stack } from "expo-router";
 import { useContext } from "react";
@@ -13,7 +14,7 @@ export default function PrivateLayout(){
     }
 
     return (
-        <>
+        <TransactionContextProvider>
             <StatusBar barStyle="default" backgroundColor={bgColor} />
             <Stack  screenOptions={{
                 headerShown: false,
@@ -21,6 +22,6 @@ export default function PrivateLayout(){
                     backgroundColor: bgColor,
                 }
             }}/>
-        </>
+        </TransactionContextProvider>
     );
   }
