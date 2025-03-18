@@ -1,9 +1,8 @@
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import { colors } from "@/styles/colors";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Link, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import { Methods, paymentsModelView } from './paymentsModelView';
 import { ModalCreateTransaction } from './ModalCreateTransaction';
@@ -13,16 +12,14 @@ export default function Payments(){
     const { id } = useLocalSearchParams();
 
     const {
-        totalAmount,
         paymentsMethods,
         isModalOpen,
-        allTransactions,
-        isLoadingTransactions,
+        selectedTransactions,
+        isTransactionsLoading,
         handleModal,
         handlePaymentsMethods,
-        setTrackTransactions,
         handleBackToHome
-    } = paymentsModelView(id)
+    } = paymentsModelView()
 
     return (
         <View className="flex-1 items-center bg-gray-200">
@@ -35,18 +32,7 @@ export default function Payments(){
             </LinearGradient>
             {/* Main Info */}
             <View className="p-4">
-                <View className="flex-row justify-end items-end">
-                    {/* <View className='gap-3'>
-                        <Text className="font-semibold">
-                            Saldo 
-                            {paymentsMethods === "" && " Total"}
-                            {paymentsMethods === "INCOME" && " de Entradas"}
-                            {paymentsMethods === "OUTCOME" && " de Saidas"}
-                        </Text>
-                        <Text className="font-bold text-4xl">R$ {totalAmount.toFixed(2)}</Text>
-                    </View> */}
-
-                    
+                <View className="flex-row justify-end items-end">            
                     <View className="items-center gap-2">
                         <TouchableOpacity className="bg-green-medium rounded-full p-2 w-14 h-14 items-center justify-center border-[0.5px]" onPress={handleModal}>
                             <SimpleLineIcons name="wallet" size={20} color="black" />
@@ -69,7 +55,7 @@ export default function Payments(){
             </View>
 
             <View className="flex flex-col gap-2 w-[80%] justify-center mx-auto">
-                {!isLoadingTransactions && allTransactions && allTransactions.map((transactions)=> (
+                {!isTransactionsLoading && selectedTransactions && selectedTransactions.map((transactions)=> (
                     <Transactions
                         key={transactions.id}
                         data={transactions}
@@ -83,7 +69,6 @@ export default function Payments(){
                 wallet_id={id}
                 closeModal={handleModal}
                 isModalOpen={isModalOpen}
-                setTrackTransactions={setTrackTransactions}
             />
         </View>
     )
