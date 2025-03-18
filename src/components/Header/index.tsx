@@ -23,12 +23,15 @@ export function Header({total}: HeaderProps){
                     <MaterialIcons name="logout" size={32} color="white" />
                 </View>
             </View>
-            {!isTransactionsLoading ? (
+            {!isTransactionsLoading && (
                 <View className="flex flex-col justify-end items-center pt-20">
                     <Text className="font-semibold text-white">Saldo Atual</Text>
                     <Text className="text-5xl font-bold text-white mt-2">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total)}</Text>
                 </View>
-            ) : (
+                ) 
+            }
+
+            {isTransactionsLoading && (
                 <View className="flex flex-col justify-end items-center pt-20 animate-pulse">
                     <View className="h-4 bg-gray-300 rounded w-24" />
                     <View className="h-10 bg-gray-300 rounded w-40 mt-4" />

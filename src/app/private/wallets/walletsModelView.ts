@@ -1,4 +1,3 @@
-import { API } from "@/api/config"
 import { useAPI } from "@/hooks/useApi"
 import SecureStoragePersistence from "@/persistence/secureStorage"
 import { AxiosError } from "axios"

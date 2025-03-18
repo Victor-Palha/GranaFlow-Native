@@ -1,7 +1,7 @@
 import { Header } from '@/components/Header';
 import { Nav } from '@/components/Nav';
 import { useLocalSearchParams } from 'expo-router';
-import { FlatList, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { HomeModelView } from './homeModelView';
 import { Transactions } from '@/components/Transactions';
 import { TransactionsLoading } from '@/components/TrasactionsLoading';

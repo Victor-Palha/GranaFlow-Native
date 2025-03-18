@@ -4,9 +4,20 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { walletsModelView } from "./walletsModelView";
 import { Profile } from "@/components/Profile";
 import { ModalCreateWallet } from "./ModalCreateWallet";
+import { WalletsLoading } from "@/components/ProfileLoading";
+import { useContext } from "react";
+import { TransactionContext } from "@/contexts/transaction/transactionContext";
+import { router } from "expo-router";
 
 export default function Wallets(){
+    const {setWalletToProvider} = useContext(TransactionContext)
+
     const {wallets, isLoadingWallets, isModalOpen, handleModal, setTrackWallets} = walletsModelView()
+
+    function handleSelectWallet(wallet_id: number){
+        setWalletToProvider(wallet_id)
+        router.push(`/private/home/${wallet_id}`)
+    }
     return (
         <View className="flex-1 items-center pt-14">
             <View className="flex-row items-center justify-between w-full px-10">
@@ -24,12 +35,12 @@ export default function Wallets(){
             </View>
 
             <View className="items-center gap-5 mt-5">
-                {wallets && wallets.length > 0 ? (
+                {!isLoadingWallets && wallets && wallets.length > 0 ? (
                     <FlatList
                         data={wallets}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => (
-                            <Profile id={item.id} name={item.name} type={item.type} />
+                            <Profile id={item.id} name={item.name} type={item.type} handleSelectWallet={handleSelectWallet}/>
                         )}
                         contentContainerStyle={{ alignItems: 'center', paddingTop: 80 }}
                         ListFooterComponent={
@@ -44,20 +55,11 @@ export default function Wallets(){
                             </TouchableOpacity>
                         }
                     />
-                    ) : (
-                    <View className="items-center mt-20">
-                        <TouchableOpacity
-                            className="items-center justify-center gap-2"
-                            onPress={handleModal}
-                        >
-                            <View className="w-28 h-28 border-black border rounded-full flex items-center justify-center border-dashed bg-green-medium shadow-black shadow-md">
-                                <Ionicons name="add-sharp" size={40} color="black" />
-                            </View>
-                            <Text className="text-xl text-white font-semibold">Criar carteira</Text>
-                        </TouchableOpacity>
-                    </View>
+                ) : (
+                    <WalletsLoading />
                 )}
             </View>
+
 
             <ModalCreateWallet
                 isModalOpen={isModalOpen}
