@@ -4,7 +4,6 @@ import { useContext, useState } from "react";
 import { Modal, Text, TextInput, TouchableOpacity, View, Switch, Platform, ScrollView, Alert } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { API } from "@/api/config";
-import SecureStoragePersistence from "@/persistence/secureStorage";
 import { AxiosError } from "axios";
 import { useAPI } from "@/hooks/useApi";
 import { TransactionContext } from "@/contexts/transaction/transactionContext";
@@ -69,7 +68,7 @@ export function ModalCreateTransaction({ wallet_id, isModalOpen, closeModal }: M
 
     async function createRecurrentTransaction(api: typeof API) {
         if (recurrenceEnd < recurrenceStart) {
-            Alert.alert("Erro", "Por favor, escolha uma data final menor que a inicial!")
+            Alert.alert("Erro", "Por favor, escolha uma data final maior que a inicial!")
             return
         }
         try {
@@ -102,10 +101,10 @@ export function ModalCreateTransaction({ wallet_id, isModalOpen, closeModal }: M
 
     function parseCurrencyToNumber(value: string): number {
         const cleaned = value
-            .replace(/\s/g, '')       // remove espaços
-            .replace('R$', '')        // remove símbolo do real
-            .replace(/\./g, '')       // remove separadores de milhar
-            .replace(',', '.');       // troca vírgula por ponto
+            .replace(/\s/g, '')
+            .replace('R$', '')
+            .replace(/\./g, '')
+            .replace(',', '.');
 
         return parseFloat(cleaned) || 0;
     }

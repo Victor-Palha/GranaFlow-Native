@@ -28,7 +28,7 @@ export function AuthContextProvider({children}: {children: React.ReactNode}){
     async function onLogin(){
         setIsLoading(true)
         try {
-            const authUrl = `${URLS.api}/auth/google`;
+            const authUrl = `${URLS.api}/auth/google?client=mobile`;
             const result = await WebBrowser.openAuthSessionAsync(authUrl, `${URLS.api}/auth/google/callback`);
             if (result.type === 'success') {
                 const params = new URLSearchParams(result.url.split('?')[1]);

@@ -1,9 +1,7 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Alert, FlatList, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import { Dropdown, DropdownData } from "@/components/Dropdown";
-import { API } from "@/api/config";
-import SecureStoragePersistence from "@/persistence/secureStorage";
 import { AxiosError } from "axios";
 import { useAPI } from "@/hooks/useApi";
 

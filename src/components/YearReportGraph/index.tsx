@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { BarChart } from 'react-native-gifted-charts';
 import { View, Text } from 'react-native';
 import { colors } from '@/styles/colors';
-import { API } from '@/api/config';
-import SecureStoragePersistence from '@/persistence/secureStorage';
 import { MONTHS } from '@/constants/MONTHS';
 import { MonthReportsInformation } from './MonthReportsInformation';
 import { Transaction } from '@/@types/transactions';

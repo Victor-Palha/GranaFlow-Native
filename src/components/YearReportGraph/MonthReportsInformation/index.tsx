@@ -24,7 +24,7 @@ export function MonthReportsInformation({ selectedReport, monthReports, currentM
         }, {});
       
         setSelectedTransactionsBasedOnSubtype(grouped[subtype] ?? []);
-      }
+    }
 
     useEffect(()=>{
         if(selectedSubtype && monthReports && monthReports.transactions){
